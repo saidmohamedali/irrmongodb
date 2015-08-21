@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "All IRR Definition";
+}
+
+@foreach (var irrdef in Model)
+{
+    <h2>@irrdef.Name</h2>
+    <p>@irrdef.Description</p>
+    <p><a class="btn btn-default btn-sm" href="@Url.Action("IRRDefinition", "Home", new { id = irrdef.Id })">View &raquo;</a></p>
+}

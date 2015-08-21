@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>IRR Calculator</h1>
+    <p class="lead">Simple multi-IRR Calculation implementation using MONDGO DB and .Net C#.</p>
+    <p><a href="https://fr.linkedin.com/pub/mohamed-ali-said/30/994/517" class="btn btn-primary btn-lg">Said MOHAMED-ALI &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>IRR Definitions</h2>
+        @foreach(var irrdef in Model.IRRDefinitions)
+        {
+            <h4>@irrdef.Name</h4>
+            <p><a class="btn btn-default btn-sm" href="@Url.Action("IRRDefinition", "Home", new { id = irrdef.Id })">View &raquo;</a></p>
+           
+            @*<p>@post.Content.Substring(0, Math.Min(post.Content.Length - 1, 100))</p>
+            <p><a class="btn btn-default btn-sm" href="@Url.Action("Post", "Home", new { id = post.Id })">View &raquo;</a></p>*@
+        }
+    </div>
+    <div class="col-md-4">
+        Not finished.
+    </div>
+</div>
