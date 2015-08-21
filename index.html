@@ -74,7 +74,23 @@ The research by dichotomy IRRG optimizes the resolution of the equation.</p>
 <h3>
 <a id="irr-calculation-schema-design" class="anchor" href="#irr-calculation-schema-design" aria-hidden="true"><span class="octicon octicon-link"></span></a>IRR Calculation Schema Design</h3>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+<p>IIR calculations go through the collection of different types of flows. The nature of the stream sets the inbound or outbound direction of the latter.
+Outflows are by definition disbursements  and Inflows are attached repayments and income.
+Each flow belongs by nature to an allocation represented by the following concepts:</p>
+
+<ul>
+<li>expenditure</li>
+<li>bills</li>
+<li>Accessories items</li>
+<li>Financial headings</li>
+<li>Bonus flows</li>
+<li>PEE flow</li>
+</ul>
+
+<p>In MongoDB We need a collection which contains all flows, so let call this collections flows.
+We need also an IRR definition collection which contains IRR descriptions and Allocations so that we can calculate IRR by allocation. Note that we can then represent the IRR as a tree with components then we can add an ancesstor field for that.</p>
+
+<p><img src="images/IRR_MONGODB_SCHEMA.png" alt="IRR Mongodb Schema Design"></p>
 
 <h3>
 <a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating pages manually</h3>
