@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Flows";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Direction</th>
+        <th>Type</th>
+        <th>Allocation</th>
+        <th>Value</th>
+    </tr>
+
+    @foreach (var flow in Model.Flows)
+            {
+        <tr>
+            <td>@flow.Id</td>
+            <td>@flow.Date</td>
+            <td>@flow.Direction</td>
+            <td>@flow.Type</td>
+            <td>@flow.Allocation</td>
+            <td>@flow.Value</td>
+
+        </tr>
+    }
+</table>
+
+@using (Html.BeginForm("Newflow", "Home"))
+{
+
+    <label name="Name">Date:</label><textarea name="Date"></textarea>
+    <label>Direction:</label><textarea name="Direction"></textarea>
+    <label>Type:</label><textarea name="Type"></textarea>
+    <label>Allocation:</label><textarea name="Allocation"></textarea>
+    <label name="Name">Value:</label><textarea name="Value"></textarea>
+    <p>
+        <button type="submit" class="btn btn-default">Submit &raquo;</button>
+    </p>
+}

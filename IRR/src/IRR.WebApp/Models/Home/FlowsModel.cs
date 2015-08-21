@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace IRRCalulation.WebApp.Models.Home
 {
-    public class IndexModel
+    public class FlowsModel
     {
-        public List<IRRDefinition> IRRDefinitions { get; set; }
-
         public List<Flow> Flows { get; set; }
+
+        public NewFlowModel NewFlow { get; set; }
+
     }
 }

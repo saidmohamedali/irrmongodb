@@ -12,7 +12,6 @@ namespace IRRCalulation.WebApp.Models
       
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
-        public string name { get; set; }
         public string Type { get; set; }
         public DateTime Date { get; set; }
         public string Direction { get; set; }

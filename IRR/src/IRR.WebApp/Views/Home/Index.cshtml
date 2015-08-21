@@ -21,6 +21,22 @@
         }
     </div>
     <div class="col-md-4">
-        Not finished.
+        <h2>Flows</h2>
+        <table border="1">
+            @foreach (var flow in Model.Flows)
+            {
+                <tr>
+                    <td>@flow.Id</td>
+                    <td>@flow.Date</td>
+                    <td>@flow.Direction</td>
+                    <td>@flow.Allocation</td>
+                    <td>@flow.Value</td>
+
+                </tr>
+            }
+        </table>
+       
+        <p><a class="btn btn-default btn-sm" href="@Url.Action("Flows", "Home", new { Model.Flows })">Add New flow &raquo;</a></p>
+        
     </div>
 </div>

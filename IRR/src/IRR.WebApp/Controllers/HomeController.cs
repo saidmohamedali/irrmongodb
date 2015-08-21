@@ -18,13 +18,16 @@ namespace IRRCalulation.WebApp.Controllers
         {
             var lContext = new IRRContext();
             
-            // from newest to oldest
+           
             var filter = new BsonDocument();
-            var sort = Builders<IRRDefinition>.Sort.Descending(p => p.Name);
-            var recentIRRDefinitions = await lContext.IRRDefinitions.Find(filter).Sort(sort).Limit(10).ToListAsync();
+            var sortIrrDefiniton= Builders<IRRDefinition>.Sort.Descending(p => p.Name);
+            var sortFlows= Builders<Flow>.Sort.Descending(p => p.Date);
+            var lIRRDefinitions = await lContext.IRRDefinitions.Find(filter).Sort(sortIrrDefiniton).ToListAsync();
+            var lFlowsIRRDefinitions = await lContext.Flows.Find(filter).Sort(sortFlows).ToListAsync();
             var model = new IndexModel
             {
-                IRRDefinitions = recentIRRDefinitions
+                IRRDefinitions = lIRRDefinitions,
+                Flows = lFlowsIRRDefinitions
             };
 
             return View(model);
@@ -74,6 +77,24 @@ namespace IRRCalulation.WebApp.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Flows()
+        {
+            var lContext = new IRRContext();
+            var filter = new BsonDocument();
+            var sortFlows = Builders<Flow>.Sort.Descending(p => p.Date);
+            var lFlows= await lContext.Flows.Find(filter).Sort(sortFlows).ToListAsync();
+           
+            var model = new FlowsModel
+            {
+                Flows = lFlows
+
+            };
+
+            return View(model);
+        }
+
 
         [HttpGet]
         public async Task<ActionResult> IRRDefinitions(string allocation = null)
@@ -130,6 +151,7 @@ namespace IRRCalulation.WebApp.Controllers
             return RedirectToAction("IRRDefinition", new { id = model.IRRDefinitionId });
         }
 
+      
         [HttpPost]
         public async Task<ActionResult> NewAncestor(NewAncestorModel model)
         {
@@ -139,9 +161,9 @@ namespace IRRCalulation.WebApp.Controllers
             }
 
             var lContext = new IRRContext();
-            
+
             var lIRRDefinitionId = new ObjectId(model.IRRDefinitionId);
-        
+
             var irrDefinition = await lContext.IRRDefinitions.Find(x => x.Name == model.AncestorName).SingleOrDefaultAsync();
             var AncestorId = irrDefinition.Id;
             var filterIrrDef = Builders<IRRDefinition>.Filter.Eq(s => s.Id, lIRRDefinitionId);
@@ -151,6 +173,29 @@ namespace IRRCalulation.WebApp.Controllers
             await lContext.IRRDefinitions.UpdateOneAsync(filterIrrDef, update);
 
             return RedirectToAction("IRRDefinition", new { id = model.IRRDefinitionId });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> NewFlow(NewFlowModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Flows");
+            }
+
+            var lContext = new IRRContext();
+            
+            var lflow = new Flow {
+                Date = model.Date,
+                Allocation = model.Allocation,
+                Direction = model.Direction,
+                Type = model.Type,
+                Value = model.Value
+            };
+        
+            await lContext.Flows.InsertOneAsync(lflow);
+
+            return RedirectToAction("Flows");
         }
 
     }
