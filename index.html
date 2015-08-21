@@ -87,10 +87,12 @@ Each flow belongs by nature to an allocation represented by the following concep
 <li>PEE flow</li>
 </ul>
 
-<p>In MongoDB We need a collection which contains all flows, so let call this collections flows.
-We need also an IRR definition collection which contains IRR descriptions and Allocations so that we can calculate IRR by allocation. Note that we can then represent the IRR as a tree with components then we can add an ancesstor field for that.</p>
+<p>In MongoDB we need a collection which contains all flows, so let call this collections flows.
+We need also an IRR definition collection which contains IRR Name and Allocations. As each IRR definition will contain its allocations, it can be calculated by allocation and we easily see dependencies between IRR Definitions which can be represented as a Tree, for that we just need an ancesstor field into IRR definition collection.</p>
 
 <p><img src="images/IRR_MONGODB_SCHEMA.png" alt="IRR Mongodb Schema Design"></p>
+
+<p>Consider the following document that captures sample of IRR definition:</p>
 
 <h3>
 <a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating pages manually</h3>
