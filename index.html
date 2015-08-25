@@ -94,6 +94,39 @@ We need also an IRR definition collection which contains IRR Name and Allocation
 
 <p>Consider the following document that captures sample of IRR definition:</p>
 
+<pre><code>&gt;db.irrdefinitions.find().pretty()
+{
+        "_id" : ObjectId("55d738877c464b2acc0481ad"),
+        "Name" : "IRR1",
+        "Description" : "gross rent",
+        "Allocations" : [
+                {
+                        "Name" : "CAPRAAF",
+                        "Description" : "CAPRAAF"
+                },
+                {
+                        "Name" : "DEBLOAL",
+                        "Description" : "DEBLOAL"
+                },
+                {
+                        "Name" : "ECHPRAO",
+                        "Description" : "ECHPRAO"
+                }
+        ],
+        "Ancestors" : [ ]
+}
+
+&gt;db.flows.find().pretty()
+{
+        "_id" : ObjectId("55d74f787c464b1584f30fc5"),
+        "Type" : null,
+        "Date" : ISODate("2008-08-19T22:00:00Z"),
+        "Direction" : "S",
+        "Allocation" : "ECHPRAO",
+        "Value" : 7674.95
+}
+</code></pre>
+
 <h3>
 <a id="application-object-model" class="anchor" href="#application-object-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Application Object Model</h3>
 
