@@ -97,6 +97,102 @@ We need also an IRR definition collection which contains IRR Name and Allocation
 <h3>
 <a id="application-object-model" class="anchor" href="#application-object-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Application Object Model</h3>
 
+<p>The application object model will be:</p>
+
+<div class="highlight highlight-c#"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">IRRDefinition</span>
+    {
+        [BsonRepresentation(BsonType.ObjectId)]
+        <span class="pl-k">public</span> ObjectId <span class="pl-en">Id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Name</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Description</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+
+        <span class="pl-k">public</span> List&lt;Allocation&gt; <span class="pl-en">Allocations</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> List&lt;ObjectId&gt; <span class="pl-en">Ancestors</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+
+        <span class="pl-k">public</span> <span class="pl-en">IRRDefinition</span>()
+        {
+            Allocations = <span class="pl-k">new</span> List&lt;Allocation&gt;();
+            Ancestors = <span class="pl-k">new</span> List&lt;ObjectId&gt;();
+        }
+    }
+
+
+ <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Flow</span>
+    {
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        <span class="pl-k">public</span> ObjectId <span class="pl-en">Id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Type</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> DateTime <span class="pl-en">Date</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Direction</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> String <span class="pl-en">Allocation</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> Double <span class="pl-en">Value</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+
+
+    }
+
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Allocation</span>
+    {
+        [BsonRepresentation(BsonType.ObjectId)]
+        <span class="pl-k">public</span> ObjectId <span class="pl-en">Id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Name</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Description</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+
+
+    }</pre></div>
+
+<p>We need to define a Data Context Object to interact with MongoDB:</p>
+
+<div class="highlight highlight-c#"><pre>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">IRRContext</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">const</span> <span class="pl-k">string</span> CONNECTION_STRING_NAME = <span class="pl-s"><span class="pl-pds">"</span>IRR<span class="pl-pds">"</span></span>;
+        <span class="pl-k">public</span> <span class="pl-k">const</span> <span class="pl-k">string</span> DATABASE_NAME = <span class="pl-s"><span class="pl-pds">"</span>irr<span class="pl-pds">"</span></span>;
+        <span class="pl-k">public</span> <span class="pl-k">const</span> <span class="pl-k">string</span> IRRDEFINITIONS_COLLECTION_NAME = <span class="pl-s"><span class="pl-pds">"</span>irrdefinitions<span class="pl-pds">"</span></span>;
+        <span class="pl-k">public</span> <span class="pl-k">const</span> <span class="pl-k">string</span> FLOWS_COLLECTION_NAME = <span class="pl-s"><span class="pl-pds">"</span>flows<span class="pl-pds">"</span></span>;
+
+        <span class="pl-c">// This is ok... Normally, they would be put into</span>
+        <span class="pl-c">// an IoC container.</span>
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">readonly</span> IMongoClient _client;
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">readonly</span> IMongoDatabase _database;
+
+        <span class="pl-k">static</span> <span class="pl-en">IRRContext</span>()
+        {
+            <span class="pl-k">var</span> connectionString = ConfigurationManager.ConnectionStrings[CONNECTION_STRING_NAME].ConnectionString;
+            _client = <span class="pl-k">new</span> MongoClient(connectionString);
+            _database = _client.GetDatabase(DATABASE_NAME);
+        }
+
+        <span class="pl-k">public</span> IMongoClient Client
+        {
+            <span class="pl-k">get</span> { <span class="pl-k">return</span> _client; }
+        }
+
+        <span class="pl-k">public</span> IMongoCollection&lt;IRRDefinition&gt; IRRDefinitions
+        {
+            <span class="pl-k">get</span> { <span class="pl-k">return</span> _database.GetCollection&lt;IRRDefinition&gt;(IRRDEFINITIONS_COLLECTION_NAME); }
+        }
+
+        <span class="pl-k">public</span> IMongoCollection&lt;Flow&gt; Flows
+        {
+            <span class="pl-k">get</span> { <span class="pl-k">return</span> _database.GetCollection&lt;Flow&gt;(FLOWS_COLLECTION_NAME); }
+        }
+    }
+</pre></div>
+
+<p>Source code is availlable on the repository for more informations, We will just be focused on interacting with MongoDb using MongoDb Driver. </p>
+
+<div class="highlight highlight-c#"><pre><span class="pl-k">using</span> MongoDB.Bson;
+<span class="pl-k">using</span> MongoDB.Bson.Serialization.Attributes;
+<span class="pl-k">using</span> MongoDB.Driver;</pre></div>
+
+<p>Connection String for mongodb database</p>
+
+<div class="highlight highlight-c#"><pre> &lt;connectionStrings&gt;
+    &lt;<span class="pl-k">add</span> name=<span class="pl-s"><span class="pl-pds">"</span>irr<span class="pl-pds">"</span></span> connectionString=<span class="pl-s"><span class="pl-pds">"</span>mongodb://localhost:27017<span class="pl-pds">"</span></span> /&gt;
+  &lt;/connectionStrings&gt;</pre></div>
+
 <h4>
 <a id="crud-operations-using-mongodbnet-driver" class="anchor" href="#crud-operations-using-mongodbnet-driver" aria-hidden="true"><span class="octicon octicon-link"></span></a>CRUD Operations using MongoDB.Net Driver</h4>
 
